@@ -2,6 +2,7 @@ from flask import jsonify, request
 import requests
 import os 
 from app import db
+from flask_cors import CORS, cross_origin
 # import base64
 # import requests
 import openai
@@ -22,6 +23,7 @@ openai.Model.list()
 
 # Login - Get Token with Username/Password in header
 @api.route('/token', methods=['POST'])
+@cross_origin
 @basic_auth.login_required
 def get_token():
     user = basic_auth.current_user()
@@ -31,6 +33,7 @@ def get_token():
 
 # Create a user
 @api.route('/users', methods=['POST'])
+@cross_origin
 def create_user():
     data = request.json
     # Validate the data
@@ -82,6 +85,7 @@ def delete_user(id):
 
 # Get user info from token
 @api.route('/me')
+@cross_origin
 @token_auth.login_required
 def me():
     return token_auth.current_user().to_dict()
@@ -89,6 +93,7 @@ def me():
 
 # Create a character
 @api.route('/characters', methods=['POST'])
+@cross_origin
 @token_auth.login_required
 def create_character(): 
     if not request.is_json:
